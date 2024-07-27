@@ -1,0 +1,61 @@
+<?php
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Home;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Cookie;
+use Carbon\Carbon;
+
+class Landing extends Home
+{
+    public function index(Request $request)
+    {
+        // Affiliate Tracking Logic (Unchanged)
+        $aff_track = $request->aff_track;
+        if ($aff_track !== null) {
+            $affiliate_user_id = hex2bin($aff_track);
+            Cookie::queue('affiliate_user_id', $affiliate_user_id, 525600); 
+        }
+
+        // View Data Preparation (Unchanged)
+        $data = $this->make_view_data();
+        if ($data['disable_landing_page'] == '1') {
+            return redirect()->route('login');
+        }
+        $data['body'] = 'landing.index';
+        $data['title'] = $data['get_landing_language']->company_title ?? '';
+
+        // AI Template Data (Unchanged)
+        $template_sidebar = DB::table("ai_templates")
+            ->select('ai_templates.*', 'group_name', 'group_slug', 'icon_class')
+            ->leftJoin('ai_template_groups', 'ai_template_groups.id', '=', 'ai_templates.ai_template_group_id')
+            ->where(['ai_template_groups.status' => '1', 'ai_templates.status' => '1'])
+            ->orderByRaw('ai_template_groups.serial asc')
+            ->get();
+        $ai_sidebar_group_by_id = [];
+        $template_group_icon_list = [];
+        $template_list = [];
+        foreach ($template_sidebar as $tk => $tv) {
+            $api_group = $tv->api_group;
+            $tv->has_access = true;
+            $ai_sidebar_group_by_id[$tv->ai_template_group_id][] = (array)$tv;
+        }
+
+        $template_group_data = DB::table("ai_template_groups")->where(['status' => '1'])->orderByRaw('serial asc')->get();
+        foreach ($template_group_data as $tk => $tv) {
+            $template_group_icon_list[$tv->id] = $tv->icon_class;
+            $template_list[$tv->id] = __($tv->group_name);
+        }
+
+        $data['template_list'] = $template_list;
+        $data['template_group_icon_list'] = $template_group_icon_list;
+        $data['ai_sidebar_group_by_id'] = $ai_sidebar_group_by_id;
+
+        return $this->site_viewcontroller($data);
+    }
+
+    // ... (other methods like pricing_plan, policy methods, etc.)
+}
