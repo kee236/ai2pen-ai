@@ -1155,14 +1155,16 @@ class Home extends BaseController
         return $data;
     }
 
-    public function important_feature($redirect=true)
+
+public function important_feature($redirect=true)
     {
         if(File::exists(base_path('config/build.txt')) && File::exists(base_path('assets/build.txt')))
         {
             $config_existing_content = File::get(base_path('config/build.txt'));
             $config_decoded_content = json_decode($config_existing_content, true);
 
-            $core_existing_content = File::get(base_path('assets/build.txt'));
+
+$core_existing_content = File::get(base_path('assets/build.txt'));
             $core_decoded_content = json_decode($core_existing_content, true);
 
             if($config_decoded_content['is_active'] != md5($config_decoded_content['purchase_code']) || $core_decoded_content['is_active'] != md5(md5($core_decoded_content['purchase_code'])))
@@ -1171,6 +1173,8 @@ class Home extends BaseController
                 else return false;
             }
         }
+
+
         else
         {
             if($redirect) return redirect()->route('credential-check');
@@ -1194,11 +1198,11 @@ class Home extends BaseController
 
     public function credential_check_action(Request $request)
     {
-        $domain_name = $request->domain_name;
+     /*   $domain_name = $request->domain_name;
         $purchase_code = $request->purchase_code;
         $only_domain = get_domain_only($domain_name);
         $response=$this->code_activation_check_action($purchase_code,$only_domain);
-        echo json_encode($response);
+        echo json_encode($response); */
     }
 
     function get_general_content_with_checking($url,$proxy="")
