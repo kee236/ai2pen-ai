@@ -97,6 +97,10 @@
             @endif
           @endif
 
+          <a class="dropdown-item" href="{{ route('API-Setting') }}"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>{{__('API Setting')}}</a>
+
+          <a class="dropdown-item" href="{{ route('ai_model_index') }}"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>{{__('Ai Models')}}</a>
+
           <a class="dropdown-item" href="{{ route('logout') }}"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>{{__('Sign Out')}}</a>
         </div>
       </li>
