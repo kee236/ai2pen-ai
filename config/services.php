@@ -1,6 +1,33 @@
 <?php
 
 return [
+    'facebook' => [
+        'client_id' => env('FACEBOOK_APP_ID'),
+        'client_secret' => env('FACEBOOK_APP_SECRET'),
+        'redirect' => env('FACEBOOK_REDIRECT'),
+    ],
+    'line' => [
+        'channel_id' => env('LINE_CHANNEL_ID'),
+        'channel_secret' => env('LINE_CHANNEL_SECRET'),
+        'channel_access_token' => env('LINE_CHANNEL_ACCESS_TOKEN'),
+    ],
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+    ],
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+    ],
+    'dialogflow' => [
+        'project_id' => env('DIALOGFLOW_PROJECT_ID'),
+        'private_key' => env('DIALOGFLOW_PRIVATE_KEY'),
+        'client_email' => env('DIALOGFLOW_CLIENT_EMAIL'),
+    ],
+];
+
+/*
+
+
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -39,3 +66,4 @@ return [
 ],
 
 ];
+*/
