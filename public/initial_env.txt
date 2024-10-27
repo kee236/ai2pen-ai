@@ -11,12 +11,33 @@ LOG_CHANNEL=stack
 LOG_DEPRECATIONS_CHANNEL=null
 LOG_LEVEL=debug
 
+# AI Configurations
+OPENAI_API_KEY=your_openai_api_key
+GEMINI_API_KEY=your_gemini_api_key
+DIALOGFLOW_PROJECT_ID=your_dialogflow_project_id
+DIALOGFLOW_PRIVATE_KEY=your_dialogflow_private_key
+DIALOGFLOW_CLIENT_EMAIL=your_dialogflow_client_email
+
+# Social Media Configurations
+FACEBOOK_APP_ID=your_facebook_app_id
+FACEBOOK_APP_SECRET=your_facebook_app_secret
+FACEBOOK_PAGE_ACCESS_TOKEN=your_facebook_page_access_token
+
+LINE_CHANNEL_ID=your_line_channel_id
+LINE_CHANNEL_SECRET=your_line_channel_secret
+LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token
+
+
+# Database Configurations
 DB_CONNECTION=mysql
-DB_HOST=
+DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=
-DB_USERNAME=
-DB_PASSWORD=
+DB_DATABASE=your_database_name
+DB_USERNAME=your_database_username
+DB_PASSWORD=your_database_password
+
+
+
 
 BROADCAST_DRIVER=log
 CACHE_DRIVER=file
