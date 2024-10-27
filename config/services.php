@@ -29,7 +29,7 @@ return [
 
 return [
 
-    /*
+    */
     |--------------------------------------------------------------------------
     | Third Party Services
     |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ return [
     | location for this type of information, allowing packages to have
     | a conventional file to locate the various service credentials.
     |
-    */
+    */ /*
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
