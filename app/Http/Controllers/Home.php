@@ -1156,150 +1156,45 @@ class Home extends BaseController
     }
 
 
+
+
 public function important_feature($redirect=true)
     {
-        if(File::exists(base_path('config/build.txt')) && File::exists(base_path('assets/build.txt')))
-        {
-            $config_existing_content = File::get(base_path('config/build.txt'));
-            $config_decoded_content = json_decode($config_existing_content, true);
-
-
-$core_existing_content = File::get(base_path('assets/build.txt'));
-            $core_decoded_content = json_decode($core_existing_content, true);
-
-            if($config_decoded_content['is_active'] != md5($config_decoded_content['purchase_code']) || $core_decoded_content['is_active'] != md5(md5($core_decoded_content['purchase_code'])))
-            {
-                if($redirect) return redirect()->route('credential-check');
-                else return false;
-            }
-        }
-
-
-        else
-        {
-            if($redirect) return redirect()->route('credential-check');
-            else return false;
-        }
+        
 
         return true;
     }
 
 
+
+
     public function credential_check()
     {
-        $permission = 0;
-        if(Auth::user()->user_type =="Admin") $permission = 1;
-        else $permission = 0;
-        if($permission == 0) abort(403);
-
-        $data["page_title"] = __("Credential Check");
+        
         return view('auth.credential-check');
     }
 
+
+
+
     public function credential_check_action(Request $request)
     {
-     /*   $domain_name = $request->domain_name;
-        $purchase_code = $request->purchase_code;
-        $only_domain = get_domain_only($domain_name);
-        $response=$this->code_activation_check_action($purchase_code,$only_domain);
-        echo json_encode($response); */
+     
     }
+
+
 
     function get_general_content_with_checking($url,$proxy="")
     {
-        $ch = curl_init(); // initialize curl handle
+  
 
-        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible;)");
-        curl_setopt($ch, CURLOPT_AUTOREFERER, false);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 7);
-        curl_setopt($ch, CURLOPT_REFERER, 'http://'.$url);
-        curl_setopt($ch, CURLOPT_URL, $url); // set url to post to
-        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // return into a variable
-        curl_setopt($ch, CURLOPT_TIMEOUT, 120); // times out after 50s
-        curl_setopt($ch, CURLOPT_POST, 0); // set POST method
-
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-        $content = curl_exec($ch); // run the whole process
-        $response['content'] = $content;
-
-        $res = curl_getinfo($ch);
-        if($res['http_code'] != 200)
-            $response['error'] = 'error';
-        curl_close($ch);
         return json_encode($response);
 
     }
 
-    public function code_activation_check_action($purchase_code,$only_domain,$periodic=0)
-    {
-        $url = "https://xeroneit.net/development/envato_license_activation/purchase_code_check.php?purchase_code={$purchase_code}&domain={$only_domain}&item_name=Aipen";
-        $credentials = $this->get_general_content_with_checking($url);
-
-        $decoded_credentials = json_decode($credentials,true);
-
-        $decoded_credentials = json_decode($decoded_credentials['content'],true);
 
 
-        if(!isset($decoded_credentials['error']))
-        {
-            if($decoded_credentials['status'] == 'success')
-            {
-                $content_to_write = array(
-                    'is_active' => md5($purchase_code),
-                    'purchase_code' => $purchase_code,
-                    'item_name' => $decoded_credentials['item_name'],
-                    'buy_at' => $decoded_credentials['buy_at'],
-                    'licence_type' => $decoded_credentials['license'],
-                    'domain' => $only_domain,
-                    'checking_date'=>date('Y-m-d')
-                    );
 
-                $config_json_content_to_write = json_encode($content_to_write);
-                file_put_contents(base_path('config/build.txt'), $config_json_content_to_write, LOCK_EX);
-
-
-                $content_to_write['is_active'] = md5(md5($purchase_code));
-                $core_json_content_to_write = json_encode($content_to_write);
-                file_put_contents(base_path('assets/build.txt'), $core_json_content_to_write, LOCK_EX);
-
-                // added by mostofa 06/03/2017
-                $license_type = $decoded_credentials['license'];
-
-                if($license_type == 'Extended License')
-                    $str = $purchase_code."_double";
-                else
-                    $str = $purchase_code."_single";
-
-                $encrypt_method = "AES-256-CBC";
-                $secret_key = 't8Mk8fsJMnFw69FGG5';
-                $secret_iv = '9fljzKxZmMmoT358yZ';
-                $key = hash('sha256', $secret_key);
-                $string = $str;
-                $iv = substr(hash('sha256', $secret_iv), 0, 16);
-                $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
-                $encoded = base64_encode($output);
-                file_put_contents(base_path('config/build-type.txt'), $encoded, LOCK_EX);
-
-                return json_encode($decoded_credentials);
-            }
-            else if($decoded_credentials['status'] == 'error'){
-                if(File::exists(base_path('config/build.txt'))) unlink(base_path('config/build.txt'));
-                return json_encode($decoded_credentials);
-            }
-        }
-        else
-        {
-            if($periodic == 1)
-                return json_encode(['status'=>"success"]);
-            else
-            {
-                $response['reason'] = __('cURL is not working properly, please contact your hosting provider.');
-                return json_encode($response);
-            }
-        }
-    }
 
     public function restricted_access(){
         $data = [
